@@ -52,7 +52,11 @@ def homepage(request):
 def login(request):  # Renamed to avoid conflict with built-in login()
     if request.method == 'POST':
         username = request.POST.get('username').strip()  # Get email from the login form
-        password = request.POST['password']
+        password = request.POST.get('password').strip()
+
+        print(f"Login attempt from IP: {get_client_ip(request)}")  # Log the IP address
+
+        print(f"Username: {username}, Password: {'*' * len(password)}")  # Mask password in logs
 
         # Use email as the username field for authentication
         user = authenticate(username=username, password=password)  
@@ -69,7 +73,7 @@ def login(request):  # Renamed to avoid conflict with built-in login()
 @login_required(login_url='login')
 def logout(request):
     auth.logout(request)
-    return redirect('login')
+    return redirect('home')
 
 def signUp(request):
     if request.method == 'POST':
