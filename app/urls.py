@@ -9,13 +9,13 @@ urlpatterns = [
     path('sign-up/', views.signUp, name="signup"),
     path('new/post/stp-1/', views.post_1, name="post_1"),
     path('new/post/stp-2/', views.post_2, name="post_2"),
-    path("CVC/user/update/profile/", views.manage_profile, name="create_profile"),
+    #path("CVC/user/update/profile/", views.manage_profile, name="create_profile"),
 
     # Profile View (username may include slashes)
     re_path(r'^CVC/(?P<username>.+)/profile/$', views.profile, name='profile'),
 
     # Create Profile
-    #re_path(r'^CVC/(?P<username>.+)/create/profile/$', views.manage_profile, name='create_profile'),
+    re_path(r'^CVC/(?P<username>.+)/create/profile/$', views.manage_profile, name='create_profile'),
 
     # Settings
     re_path(r'^CVC/(?P<username>.+)/profile/settings/$', views.settings, name='settings'),
