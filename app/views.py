@@ -54,10 +54,6 @@ def login(request):  # Renamed to avoid conflict with built-in login()
         username = request.POST.get('username').strip()  # Get email from the login form
         password = request.POST.get('password').strip()
 
-        print(f"Login attempt from IP: {get_client_ip(request)}")  # Log the IP address
-
-        print(f"Username: {username}, Password: {'*' * len(password)}")  # Mask password in logs
-
         # Use email as the username field for authentication
         user = authenticate(username=username, password=password)  
 
