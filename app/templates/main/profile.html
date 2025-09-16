@@ -1,0 +1,257 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block meta %}
+<meta name="title" content="CVC/{{ request.user.username }}">
+<meta property="og:image" href="{% static 'img/cvc.png' %}">
+<meta name="description"
+    content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+{% endblock meta %}
+
+{% block title %} <title>@{{ user_profile.user.username }} | CVC-Profile</title> {% endblock title %}
+
+{% block style %}
+<style>
+    /* Style for desktop and large screens */
+    @media (min-width: 800px) {
+        .content {
+            margin-top: 20px;
+            background-color: #fff;
+            width: 620px;
+        }
+    }
+
+    /* Style for mobile devices and small screens */
+    @media (max-width: 800px) {
+        .content {
+            margin-top: 80px;
+            background-color: #fff;
+            width: 100%;
+        }
+    }
+
+    .profile-container {
+        height: auto;
+    }
+
+    .user-profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cover-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .cover-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-container {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        background-color: #fff;
+        /*transform: translate(-100%, -50%);*/
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 123, 145, 0.48);
+        object-fit: cover;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90%;
+    }
+
+    .btn-icon {
+        margin: 20px;
+    }
+
+    .btn-icon img {
+        width: 20px;
+        height: auto;
+        object-fit: cover;
+        color: aqua;
+    }
+
+
+    .username {
+        font-size: 14px;
+        margin-top: 10px;
+        color: aqua;
+    }
+
+    .full-name {
+        margin-top: 10px;
+    }
+
+    .email {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .bio {
+        margin-top: 10px;
+    }
+
+    .post {
+        background-color: whitesmoke;
+        padding: 10px;
+        border-radius: 20px;
+        margin-top: 30px;
+        margin: 15px;
+    }
+
+    .post_img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .post_img img {
+        width: 320px;
+        height: auto;
+        border-radius: 20px;
+    }
+
+    .btn-btn a {
+        font-size: 12px;
+        margin: 10px;
+        text-decoration: none;
+    }
+
+    .btn-btn img {
+        width: 18px;
+        height: 18px;
+        border: 2px solid;
+        padding: 3px;
+        border-radius: 20px;
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+<div class="content">
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <div class="user-profile-info">
+            {% if user_profile.cover_img %}
+            <div class="cover-image">
+                <img src="{{ user_profile.cover_img.url }}" alt="Cover img">
+            </div>
+            {% else %}
+            <div class="cover-image">
+                <img src="https://source.unsplash.com/1600x900/?landscape,motivation" alt="Cover img">
+            </div>
+            {% endif %}
+
+            {% if user_profile.profile_img %}
+            <div class="image-container">
+                <img src="{{ user_profile.profile_img.url }}" alt="profile img">
+            </div>
+            {% else %}
+            <div class="image-container">
+                <img src="{% static 'img/cvc.png' %}" alt="profile img">
+            </div>
+            {% endif %}
+            <div class="user-info">
+                <p class="username"><b>CVC/</b>{{ user_profile.user.username }}</p>
+
+                {% if request.user == user_profile.user %}
+                <p class="email">{{ user.email }}</p>
+                <p class="full-name"><b style="font-size: 22px;">{{ user.first_name }} {{ user.last_name }}</b></p>
+                {% endif %}
+
+                <p class="bio">"{{ user_profile.bio }}"</p>
+            </div>
+            <br>
+            <div class="action-btn">
+                <a class="btn-icon" href="{% url 'settings' request.user.username %}"><img
+                        src="{% static 'img/icon/settings.png' %}"></a>
+                <a class="btn-icon" href="#"><img src="{% static 'img/icon/share.png' %}"></a>
+            </div>
+        </div>
+
+        <!-- All posts by current user -->
+        {% for post in user_posts %}
+        <div class="user_post" id="post-content">
+            <div class="post">
+                <br>
+                <div class="post_content">
+                    <p style="white-space: pre-wrap;">{{ post.post_caption }}</p>
+                    <p style="color: rgb(158, 158, 158); margin-top: 10px;">{{ post.created_on }}</p>
+                </div>
+
+                {% if post.audio %}
+                <div class="post_content">
+                    <audio id="audio-preview" src="{{ post.audio.url }}" controls></audio>
+                </div>
+                {% endif %}
+
+                {% if post.post_image %}
+                <div class="post_img">
+                    <img src="{{ post.post_image.url }}" alt="Post image">
+                </div>
+                {% endif %}
+
+                <div class="btn-btn">
+                    <a href="#" onclick="sharePage(event)">
+                        <img style="border-color: blue;" src="{% static 'img/icon/share.png' %}">
+                    </a>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'comment' post.post_id %}"><img style="border-color: yellow;"
+                            src="{% static 'img/icon/chat.png' %}" alt="Edit post"> {{ post.comment_count }}</a>
+                    {% endif %}
+                    {% if post.user == request.user %}
+                    <a href="{% url 'delete' post.post_id %}" class="delete-link">
+                        <img style="border-color: red;" src="{% static 'img/icon/delete.png' %}" alt="Delete post">
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br><br><br><br>
+</div>
+<script>
+    function sharePage(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        const pageUrl = window.location.href; // Get the current page URL
+
+        if (navigator.share) {
+            // If Web Share API is supported
+            navigator.share({
+                title: document.title,
+                url: pageUrl
+            }).then(() => {
+                console.log('Page shared successfully');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(pageUrl).then(() => {
+                alert("Link copied to clipboard! You can share it manually.");
+            }).catch((error) => {
+                console.error("Failed to copy:", error);
+            });
+        }
+    }
+</script>
+
+{% endblock main %}

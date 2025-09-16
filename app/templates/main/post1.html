@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block meta %}
+<meta property="og:image" href="{% static 'img/cvc.png' %}">
+<meta name="description"
+    content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+{% endblock meta %}
+
+{% block title %} <title>Post stp-1 | CVC</title> {% endblock title %}
+
+{% block style %}
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    button {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    textarea {
+        border: none;
+        padding: 10px;
+        margin: 10px;
+        box-shadow: 0 0 10px rgba(154, 208, 218, 0.699);
+        background-color: #fff;
+        border-radius: 10px;
+    }
+
+    .next {
+        background-color: aqua;
+        margin-top: 30px;
+        border: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        color: #fff;
+        transition: 0.7s ease-in;
+    }
+
+    .next:hover {
+        background-color: rgb(0, 194, 194);
+    }
+
+    /* style for Mobile devices and small screen 
+    @media (max-width: 600px) {
+        .upload-post form {
+            display: flex;
+            flex-direction: column;
+            margin: 22px;
+            padding: 10px;
+            max-width: 800px;
+            height: 100% auto;
+        }
+    }*/
+</style>
+{% endblock style %}
+
+{% block main %}
+<center>
+    {% for message in messages %}
+    <p style="color: rgb(25, 180, 51);">{{ message }}</p>
+    {% endfor %}
+</center>
+<!-- Upload Post Container -->
+<div class="upload-post">
+    <form action="{% url 'post_1' %}" method="post">
+        {% csrf_token%}
+
+        <textarea name="post-caption" id="post-caption" cols="30" rows="10"
+            placeholder="Speak your mind without limits..." required></textarea>
+
+        <br><br><br><br><br>
+        <button type="submit" class="next" value="Next">Next</button>
+    </form>
+</div>
+{% endblock main %}

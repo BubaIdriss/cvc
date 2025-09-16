@@ -1,0 +1,159 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block meta %}
+<meta property="og:image" href="{% static 'img/cvc.png' %}">
+<meta name="description"
+    content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+{% endblock meta %}
+{% block title %} <title>Post Step 2 | CVC</title> {% endblock title %}
+
+{% block style %}
+<style>
+    .next {
+        background-color: aqua;
+        margin-top: 30px;
+        border: none;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        color: #fff;
+        transition: 0.7s ease-in;
+    }
+
+    .next:hover {
+        background-color: rgb(0, 194, 194);
+    }
+
+    /* Style for desktop and large screens */
+    @media (min-width: 800px) {
+        .content {
+            background-color: #fff;
+            width: 100%;
+            width: 620px;
+        }
+
+        .upload-post form {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin: 10px;
+            padding: 10px;
+            max-width: 800px;
+            height: 100% auto;
+        }
+    }
+
+    /* style for Mobile devices and small screen */
+    @media (max-width: 800px) {
+        .content {
+            margin-top: 80px;
+            background-color: #fff;
+            width: 100%;
+        }
+
+        .upload-post form {
+            display: flex;
+            flex-direction: column;
+            margin: 22px;
+            padding: 10px;
+            max-width: 800px;
+            height: 100% auto;
+        }
+    }
+
+    input {
+        width: 70%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .next {
+        background-color: #00bcd4;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s;
+    }
+
+    .next:hover {
+        background-color: #008c9e;
+    }
+
+    .image-preview {
+        margin-top: 20px;
+        display: none;
+        text-align: center;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+<div class="content">
+    <center>
+        {% for message in messages %}
+        <p style="color: rgb(25, 180, 51);">{{ message }}</p>
+        {% endfor %}
+    </center>
+    <!-- Upload Post Container -->
+    <div class="upload-post">
+        <form id="post-form" action="{% url 'post_2' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="post-image" id="post-image" accept=".png, .jpg, .jpeg">
+            <div class="image-preview" id="image-preview">
+                <p>Preview:</p>
+                <img id="preview-img" src="#" alt="Image Preview">
+            </div>
+            <input type="url" name="post-url-1" placeholder="Add any URL (link), if available">
+            <input type="url" name="post-url-2" placeholder="Add any URL (link), if available">
+            <input type="url" name="post-url-3" placeholder="Add any URL (link), if available">
+            <button type="submit" class="next" value="Post">Post</button>
+        </form>
+        <br><br>
+    </div>
+</div>
+
+<script>
+    // Image Preview
+    const postImageInput = document.getElementById('post-image');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    postImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.style.display = 'none';
+        }
+    });
+
+    // Spinner
+    const postForm = document.getElementById('post-form');
+    const spinnerOverlay = document.getElementById('spinner-overlay');
+    const submitButton = document.querySelector('.submit');
+
+    postForm.addEventListener('submit', (event) => {
+        spinnerOverlay.style.display = 'block';
+        submitButton.disabled = true;
+        submitButton.value = 'Posting...';
+    });
+</script>
+{% endblock main %}

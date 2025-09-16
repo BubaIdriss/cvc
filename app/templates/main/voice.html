@@ -1,0 +1,191 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block meta %}
+<meta name="keywords" content="youth, connect, YouthConnect, youthconnect, community, teenager, society">
+<meta property="og:title" content="Campus Voice Circle">
+<meta property="og:image" content="{% static 'media/Youth-Connect.png' %}">
+<meta name="description"
+    content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+<meta property="og:image"
+    content="https://res.cloudinary.com/doqz23dum/image/upload/v1718616077/Youth-Connect_ngjfgd.png">
+{% endblock meta %}
+
+{% block style %}
+<style>
+    /* Style for desktop and large screens */
+    @media (min-width: 800px) {
+        .content {
+            margin-top: 20px;
+            background-color: #fff;
+            width: 620px;
+            padding: 18px;
+            height: auto;
+        }
+    }
+
+    /* style for Mobile devices and small screen */
+    @media (max-width: 800px) {
+        .content {
+            margin-top: 80px;
+            background-color: #fff;
+            width: 90%;
+            padding: 14px;
+            height: auto;
+        }
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    button:disabled {
+        background-color: #d3d3d3;
+        cursor: not-allowed;
+    }
+
+    #audio-preview {
+        margin: 20px 0;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    #upload-btn {
+        width: 80%;
+        margin-top: 10px;
+    }
+
+    .image-preview {
+        margin-top: 20px;
+        display: none;
+        text-align: center;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type='file'] {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+<div class="content">
+    <!-- Post Container -->
+    <h1>Record Your Voice Note</h1>
+
+    <!-- Recording Controls -->
+    <button id="start-btn">Start Recording</button>
+    <button id="stop-btn" disabled>Stop Recording</button>
+
+    <!-- Audio Preview -->
+    <audio id="audio-preview" controls></audio>
+
+    <!-- Upload Form -->
+    <form id="upload-form" action="{% url 'voice' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="audio_data" id="audio-data">
+
+        <input type="file" name="post-image" id="post-image" accept=".png, .jpg, .jpeg">
+        <div class="image-preview" id="image-preview">
+            <p>Preview:</p>
+            <img id="preview-img" src="#" alt="Image Preview">
+        </div>
+        <button style="margin-left: 30px;" type="submit" disabled id="upload-btn">Post Voice Note</button>
+    </form>
+    <br><br><br><br>
+</div>
+
+<script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const uploadBtn = document.getElementById('upload-btn');
+    const audioPreview = document.getElementById('audio-preview');
+    const audioDataInput = document.getElementById('audio-data');
+
+    startBtn.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                audioChunks = [];
+
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPreview.src = audioUrl;
+
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = () => {
+                    audioDataInput.value = reader.result;
+                    uploadBtn.disabled = false;
+                };
+            };
+
+            mediaRecorder.start();
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+        } catch (error) {
+            alert("Error accessing microphone: " + error.message);
+        }
+    });
+
+    stopBtn.addEventListener('click', () => {
+        mediaRecorder.stop();
+        stopBtn.disabled = true;
+        startBtn.disabled = false;
+    });
+
+    // Image Preview
+    const postImageInput = document.getElementById('post-image');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    postImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.style.display = 'none';
+        }
+    });
+</script>
+{% endblock main %}

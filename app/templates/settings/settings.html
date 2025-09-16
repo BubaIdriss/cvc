@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CVC</title>
+    <meta property="og:image" href="{% static 'img/cvc.png' %}">
+    <meta name="description"
+        content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+
+    <link rel="stylesheet" href="{% static 'css/spinner.css' %}">
+    <script src="{% static 'js/spinner.js' %}"></script>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            position: fixed;
+            background-color: #f9f9f9;
+            width: 99%;
+            padding: 5px;
+        }
+
+        h2 {
+            margin-left: 20px;
+        }
+
+        .backward a {
+            color: #000;
+        }
+
+        /* Container styles */
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 15px;
+            margin-top: 80px;
+        }
+
+        .settings-title {
+            font-size: 1.8rem;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .settings-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Grid layout */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card styles */
+        .settings-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+        }
+
+        .settings-item:hover {
+            /*transform: translateY(-5px);*/
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .settings-item h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .settings-item p {
+            font-size: 1rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .settings-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: aqua;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .settings-link:hover {
+            background-color: rgb(0, 182, 182);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .settings-title {
+                font-size: 2rem;
+            }
+
+            .settings-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h2 class="settings-title">Settings</h2>
+    </div>
+    <hr>
+    <div class="settings-container">
+        {% for message in messages %}
+        <p style="color: aqua">{{ message }}</p>
+        {% endfor %}
+        <p class="settings-description">Manage your preferences, account, and explore more about CVC.</p>
+
+        <!-- Loading Spinner -->
+        <div id="loading-overlay"></div>
+        <div id="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="settings-grid">
+            <!-- Profile Settings -->
+            <div class="settings-item">
+                <h2>Profile Settings</h2>
+                <p>Update your personal details, profile picture, and bio.</p>
+                <a href="{% url 'profile_settings' request.user.username %}" class="settings-link">Go to Profile
+                    Settings</a>
+            </div>
+
+            <!-- Account Settings -->
+            <div class="settings-item">
+                <h2>Account Settings</h2>
+                <p>Change your password, email, or manage account preferences.</p>
+                <a href="{% url 'edit_account' request.user.username %}" class="settings-link">Go to Account
+                    Settings</a>
+            </div>
+
+            <!-- About TripleX -->
+            <div class="settings-item">
+                <h2>About CVC</h2>
+                <p>Learn about our mission, values, and what we stand for.</p>
+                <a href="{% url 'about' %}" class="settings-link">Learn More</a>
+            </div>
+
+            <!-- Privacy Policy -->
+            <div class="settings-item">
+                <h2>Privacy Policy</h2>
+                <p>Understand how we collect, use, and protect your data.</p>
+                <a href="{% url 'privacy' %}" class="settings-link">View Privacy Policy</a>
+            </div>
+
+            <!-- Terms of Service -->
+            <div class="settings-item">
+                <h2>Terms of Service</h2>
+                <p>Review the terms and conditions for using CVC.</p>
+                <a href="{% url 'terms' %}" class="settings-link">Read Terms of Service</a>
+            </div>
+
+            <!-- Feedback/Report -->
+            <div class="settings-item">
+                <h2>Feedback and Report</h2>
+                <p>Report or send a feedback about any bug, or an advice to the Admins</p>
+                <a href="{% url 'feedback' %}" class="settings-link">Read Terms of Service</a>
+            </div>
+
+            <!-- Logout -->
+            <div class="settings-item">
+                <h2>Logout</h2>
+                <p><b>"{{ request.user.username }}"</b>, do you want to log-out of your account.</p>
+                <a href="{% url 'logout' %}" class="settings-link">Logout Now</a>
+            </div>
+
+            <a href="{% url 'index' %}">Back To Home</a>
+        </div>
+    </div>
+</body>
+
+</html>

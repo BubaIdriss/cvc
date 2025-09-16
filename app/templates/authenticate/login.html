@@ -1,0 +1,239 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{% static 'img/cvc.png' %}" sizes="32x32">
+    <link rel="icon" href="{% static 'img/cvc.png' %}" sizes="48x48">
+    <link rel="apple-touch-icon" href="#" sizes="180x180">
+    <link rel="icon" href="{% static 'img/cvc_192.png' %}" sizes="192x192">
+    <link rel="icon" href="{% static 'img/cvc_512.png' %}" sizes="512x512">
+    <meta name="title" content="Campus Voice Circle | Speak Freely, Stay Anonymous">
+    <meta name="description"
+        content="Campus Voice Circle (CVC) is a free speech platform for students, allowing anonymous discussions without fear of judgment. Join now to share your thoughts openly.">
+    <meta name="keywords"
+        content="Campus Voice Circle, CVC, free speech, student forum, anonymous discussion, student opinions, college platform">
+    <meta name="author" content="Campus Voice Circle">
+    <meta name="robots" content="index, follow"> <!-- Allows search engines to index the site -->
+    <meta name="revisit-after" content="7 days"> <!-- Tells search engines when to revisit -->
+    <meta property="og:image" href="{% static 'img/cvc.png' %}">
+
+    <title>Login | Campus Voice Circle</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-heading {
+            text-align: center;
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        a {
+            color: aqua;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Log In Button */
+        .login-btn {
+            display: flex;
+            margin-top: 15px;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background-color: aqua;
+            color: #fff;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-btn span {
+            margin-right: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: rgb(0, 214, 214);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Loading Spinner Styles */
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #09f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Overlay to darken the background */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2 class="login-heading">Log In to Campus Voice Circle</h2>
+        <p>Don’t have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+
+        <div class="form">
+            <center>
+                {% for message in messages %}
+                <p style="color: aqua;" class="error-message">{{ message }}</p>
+                {% endfor %}
+            </center>
+
+            <!-- Loading Spinner -->
+            <div id="loading-overlay"></div>
+            <div id="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+
+            <form method="post" id="myForm" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="username">Registration Number</label>
+                    <input type="text" style="text-transform: uppercase;" name="username" id="username"
+                        placeholder="Enter your RegNo" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#"><strike>Forgot Password?</strike></a>
+                </div>
+
+                <button class="login-btn" type="submit">Log In</button>
+            </form>
+
+            <div class="policy">
+                <p>By logging in, you agree to our <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Reset the spinner when the page loads
+        window.onload = function () {
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('loading-overlay').style.display = 'none';
+        };
+
+        // JavaScript to handle the loading state
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all buttons and links
+            const buttonsAndLinks = document.querySelectorAll('button, a');
+
+            buttonsAndLinks.forEach(element => {
+                element.addEventListener('click', function (event) {
+                    // Prevent default action if needed
+                    // event.preventDefault();
+
+                    // Show the loading spinner and overlay
+                    document.getElementById('loading-spinner').style.display = 'block';
+                    document.getElementById('loading-overlay').style.display = 'block';
+
+                    // Hide the spinner after 40 seconds or 1 minute
+                    setTimeout(function () {
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                    }, 5000); // 40 seconds (change to 60000 for 1 minute)
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

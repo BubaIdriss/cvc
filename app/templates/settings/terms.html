@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - CVC</title>
+    <meta property="og:image" href="{% static 'img/cvc.png' %}">
+    <meta name="description"
+        content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+    <meta title="Terms of Service - CVC" href="{% url 'terms' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-blue-600">Terms of Service</h1>
+        <p class="mt-4 text-gray-700 text-lg">
+            Welcome to **Campus Voice Circle (CVC)**. By using our platform, you agree to the following terms.
+        </p>
+
+        <h2 class="mt-6 text-2xl font-bold">1. Acceptance of Terms</h2>
+        <p class="text-gray-700">By accessing CVC, you accept these terms and agree to comply with them.</p>
+
+        <h2 class="mt-6 text-2xl font-bold">2. User Conduct</h2>
+        <p class="text-gray-700">Users must respect community guidelines. Hate speech, threats, or harassment are
+            prohibited.</p>
+
+        <h2 class="mt-6 text-2xl font-bold">3. Anonymity & Content Responsibility</h2>
+        <p class="text-gray-700">While we protect anonymity, users are responsible for the content they post.</p>
+
+        <h2 class="mt-6 text-2xl font-bold">4. Platform Rights</h2>
+        <p class="text-gray-700">CVC reserves the right to remove content that violates our guidelines.</p>
+
+        <h2 class="mt-6 text-2xl font-bold">5. Termination</h2>
+        <p class="text-gray-700">We may terminate access if users violate these terms.</p>
+
+        <h2 class="mt-6 text-2xl font-bold">6. Changes to Terms</h2>
+        <p class="text-gray-700">CVC reserves the right to modify these terms. Continued use means acceptance of
+            updates.</p>
+    </div>
+</body>
+
+</html>

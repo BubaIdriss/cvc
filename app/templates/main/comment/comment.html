@@ -1,0 +1,273 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block meta %}
+<meta name="keywords" content="youth, connect, YouthConnect, youthconnect, community, teenager, society">
+<meta property="og:title" content="Youth-Connect Blog">
+<meta property="og:image" href="{% static 'media/Youth-Connect.png' %}">
+<meta name="description"
+    content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+<meta property="og:image"
+    content="https://res.cloudinary.com/doqz23dum/image/upload/v1718616077/Youth-Connect_ngjfgd.png">
+{% endblock meta %}
+
+{% block title %} <title>Post Step 2 | CVC</title> {% endblock title %}
+
+{% block style %}
+<style>
+    .post {
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+    .post img,
+    .post audio {
+        max-width: 100%;
+        display: block;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+
+    .comments {
+        margin-top: 20px;
+    }
+
+    .comment {
+        background: #f9f9f9;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+
+    .add-comment {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 10px;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .hidden {
+        transform: translateY(100%);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 70px;
+    }
+
+    textarea,
+    input {
+        width: 90%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 800px) {
+        .user_post {
+            background-color: whitesmoke;
+            padding: 10px;
+            border-radius: 15px;
+            margin: 8px;
+            width: 90%;
+        }
+    }
+
+    .user_info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+    }
+
+    .post_img {
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .post_img img {
+        width: 220px;
+        height: auto;
+        border-radius: 20px;
+    }
+
+    .btn-btn {
+        margin-top: 20px;
+    }
+
+    .btn-btn a {
+        font-size: 12px;
+        margin: 10px;
+        text-decoration: none;
+    }
+
+    .btn-btn img {
+        width: 18px;
+        height: 18px;
+        border: 2px solid;
+        padding: 3px;
+        border-radius: 20px;
+    }
+
+    .post_content {
+        margin: 15px;
+    }
+
+    .cycle_img {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .cycle_img img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.664);
+    }
+
+    button {
+        padding: 8px 12px;
+        border: none;
+        background: aqua;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 95%;
+    }
+
+    button:hover {
+        background: rgb(0, 175, 175);
+    }
+</style>
+{% endblock style %}
+
+{% block main %}
+<!-- Post Details -->
+<div class="post">
+    <div class="user_post" id="post-content">
+        <!-- Post owner info -->
+        <div class="user_info">
+            <a style="color: #16a085; display: flex;" href="{% url 'profile' post.user.username %}">
+                <strong style="margin-left: 10px;">CVC/{{ post.user.username }}</strong>
+            </a>
+        </div>
+
+        <!-- Post content -->
+        <div class="post_content">
+            <p style="white-space: pre-wrap;">{{ post.post_caption }}</p>
+            <p style="color: rgb(158, 158, 158); margin-top: 10px;">{{ post.created_on }}</p>
+        </div>
+
+        {% if post.audio %}
+        <div class="post_audio">
+            <audio id="audio-preview" src="{{ post.audio.url }}" controls></audio>
+        </div>
+        {% endif %}
+
+        {% if post.post_image %}
+        <div class="post_img">
+            <img src="{{ post.post_image.url }}" loading="lazy" class="post-image">
+        </div>
+        {% endif %}
+
+        <!-- Action buttons -->
+        <div class="btn-btn">
+            <a href="#" onclick="sharePage(event)" class="delete-link">
+                <img style="border-color: blue;" src="{% static 'img/icon/share.png' %}">
+            </a>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments">
+        <h3>Comments</h3>
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="comment">
+            <strong>{{ comment.users.username }}</strong> >> {{ comment.comment_caption }}
+            {% if comment.comment_url %}
+            <br><a href="{{ comment.comment_url }}" target="_blank" style="font-size: 8px;" class="text-blue-500">
+                {{ comment.comment_url }}</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </div>
+    <br><br><br><br><br><br><br><br><br><br>
+</div>
+<!-- Comment Box -->
+<div class="add-comment" id="commentBox">
+    <form method="post" action="{% url 'comment' post.post_id %}">
+        {% csrf_token %}
+        <textarea name="caption" placeholder="Write your comment here..." rows="3" required></textarea>
+        <input type="url" name="comment_url" placeholder="Optional URL">
+        <button type="submit">Add Comment</button>
+    </form>
+</div>
+
+<!--
+<script>
+    let lastScrollTop = 0;
+    let commentBox = document.getElementById("commentBox");
+    let textarea = document.querySelector("textarea");
+
+    window.addEventListener("scroll", function () {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScroll < lastScrollTop) {
+            commentBox.classList.remove("hidden");
+        } else {
+            commentBox.classList.add("hidden");
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    commentBox.addEventListener("mouseenter", function () {
+        commentBox.classList.remove("hidden");
+    });
+
+    textarea.addEventListener("focus", function () {
+        commentBox.classList.remove("hidden");
+    });
+</script>
+-->
+
+<script>
+    function sharePage(event) {
+        event.preventDefault(); // Prevent the default link behavior
+
+        const pageUrl = window.location.href; // Get the current page URL
+
+        if (navigator.share) {
+            // If Web Share API is supported
+            navigator.share({
+                title: document.title,
+                url: pageUrl
+            }).then(() => {
+                console.log('Page shared successfully');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            // Fallback: Copy to clipboard
+            navigator.clipboard.writeText(pageUrl).then(() => {
+                alert("Link copied to clipboard! You can share it manually.");
+            }).catch((error) => {
+                console.error("Failed to copy:", error);
+            });
+        }
+    }
+</script>
+
+{% endblock main %}

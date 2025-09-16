@@ -1,0 +1,321 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{% static 'img/cvc.png' %}" sizes="32x32">
+    <link rel="icon" href="{% static 'img/cvc.png' %}" sizes="48x48">
+    <link rel="apple-touch-icon" href="#" sizes="180x180">
+    <link rel="icon" href="{% static 'img/cvc_192.png' %}" sizes="192x192">
+    <link rel="icon" href="{% static 'img/cvc_512.png' %}" sizes="512x512">
+    <meta name="title" content="Campus Voice Circle | Speak Freely, Stay Anonymous">
+    <meta name="description"
+        content="Campus Voice Circle (CVC) is a free speech platform for students, allowing anonymous discussions without fear of judgment. Join now to share your thoughts openly.">
+    <meta name="keywords"
+        content="Campus Voice Circle, CVC, free speech, student forum, anonymous discussion, student opinions, college platform">
+    <meta name="author" content="Campus Voice Circle">
+    <meta name="robots" content="index, follow"> <!-- Allows search engines to index the site -->
+    <meta name="revisit-after" content="7 days"> <!-- Tells search engines when to revisit -->
+    <meta property="og:image" href="{% static 'img/cvc.png' %}">
+
+    <title>Sign Up | Campus Voice Circle</title>
+    <link rel="stylesheet" href="{% static 'css/loader.css' %}">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .register-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-heading {
+            text-align: center;
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="password"] {
+            padding: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        a {
+            color: aqua;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Register Button */
+        .register-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background-color: aqua;
+            color: #fff;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .register-btn span {
+            margin-right: 10px;
+        }
+
+        .register-btn:hover {
+            background-color: rgb(1, 221, 221);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            padding: 3px;
+            background-color: rgb(255, 238, 238);
+            border-radius: 50px;
+            border: 1px solid;
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Social Sign-up Section */
+        .social-signup {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .register-container {
+                margin: 50px auto;
+                padding: 20px;
+            }
+
+            .register-heading {
+                font-size: 1.5em;
+            }
+
+            input[type="email"],
+            input[type="password"] {
+                padding: 10px;
+            }
+
+            .register-btn {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* Loading Spinner Styles */
+        #loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #09f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Overlay to darken the background */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <h2 class="register-heading">Sign Up with Campus Voice Circle</h2>
+        <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+        <div class="form">
+            {% if messages %}
+            {% for message in messages %}
+            <div style="color: aqua;" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            <br>
+            <!-- Loading Spinner -->
+            <div id="loading-overlay"></div>
+            <div id="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+
+            <form method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="username">Registration Number</label>
+                    <input type="text" name="username" id="username" style="text-transform: uppercase;"
+                        placeholder="Enter your RegNo" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" placeholder="Enter your email address" required>
+                </div>
+                <div class="input-group">
+                    <label for="password1">Password</label>
+                    <input type="password" name="pssword1" id="password1" placeholder="Enter your password" required>
+                </div>
+                <div class="input-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" name="pssword2" id="password2" placeholder="Confirm your password" required>
+                </div>
+                <div class="input-group">
+                    <label for="accept_terms">Agree to all <a href="#" target="_blank"
+                            style="text-decoration: none;">Terms & Conditions</a></label>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#"><strike>Forgot Password?</strike></a>
+                    Note: No forget password feature
+                </div>
+                <br>
+                <button class="register-btn" type="submit">Sign Up Now</button>
+
+            </form>
+
+            <!--
+            <div class="social-signup">
+                <p>Or sign up with:</p>
+                <a href="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+                    class="social-btn google-btn">Sign Up with Google</a>
+                <a href="https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
+                    class="social-btn facebook-btn">Sign Up with Facebook</a>
+                <a href="https://img.icons8.com/?size=100&id=17843&format=png&color=000000"
+                    class="social-btn apple-btn">Sign Up with Apple</a>
+            </div>
+            -->
+        </div>
+    </div>
+    <script>
+        // Reset the spinner when the page loads
+        window.onload = function () {
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('loading-overlay').style.display = 'none';
+        };
+
+        // JavaScript to handle the loading state
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all buttons and links
+            const buttonsAndLinks = document.querySelectorAll('button, a');
+
+            buttonsAndLinks.forEach(element => {
+                element.addEventListener('click', function (event) {
+                    // Prevent default action if needed
+                    // event.preventDefault();
+
+                    // Show the loading spinner and overlay
+                    document.getElementById('loading-spinner').style.display = 'block';
+                    document.getElementById('loading-overlay').style.display = 'block';
+
+                    // Hide the spinner after 40 seconds or 1 minute
+                    setTimeout(function () {
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        document.getElementById('loading-overlay').style.display = 'none';
+                    }, 5000); // 40 seconds (change to 60000 for 1 minute)
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

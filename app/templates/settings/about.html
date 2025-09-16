@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Campus Voice Circle</title>
+    <meta property="og:image" href="{% static 'img/cvc.png' %}">
+    <meta name="description"
+        content="Unique social platform where users can freely express their thoughts and ideas without the pressure of likes and follows. Join our community to share your mind and connect with others in an open and supportive environment." />
+    <meta title="About - CVC" href="{% url 'about' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-blue-600">About Us</h1>
+        <p class="mt-4 text-gray-700 text-lg">
+            <strong>Campus Voice Circle (CVC)</strong> is a platform that enhances **freedom of speech** for students.
+            We believe that every student deserves a safe space to express their thoughts without fear of judgment or
+            consequences.
+        </p>
+        <p class="mt-4 text-gray-700 text-lg">
+            Our platform ensures **anonymity** to encourage open discussions and honest opinions.
+            Whether it’s about campus life, academics, social issues, or personal experiences, **CVC** allows students
+            to share their voices freely.
+        </p>
+        <p class="mt-4 text-gray-700 text-lg">
+            Join **CVC** today and be part of a community where your thoughts matter!
+        </p>
+    </div>
+</body>
+
+</html>
