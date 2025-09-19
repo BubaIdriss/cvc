@@ -30,11 +30,10 @@
         {% if users %}
         {% for user in users %}
         <div class="flex items-center gap-4 border-b py-2">
-            <img src="{{ user.profile.profile_img.url }}" alt="{{ user.username }}"
-                class="w-10 h-10 rounded-full border">
-            <a href="{% url 'profile' user.username %}" class="text-blue-500 font-medium hover:underline">
+
+            <<< <a href="{% url 'profile' user.id %}" class="text-blue-500 font-medium hover:underline">
                 {{ user.username }}
-            </a>
+                </a> >>>
         </div>
         {% endfor %}
         {% else %}

@@ -199,7 +199,7 @@
                 <span style="font-size: 12px;">Post</span>
             </a>
 
-            <a class="icon-tag" data-loading="true" href="{% url 'profile' %}">
+            <a class="icon-tag" data-loading="true" href="{% url 'profile' request.user.id %}">
                 <img class="icons" src="{% static 'img/icon/user.png' %}">
                 <span style="font-size: 12px;">Profile</span>
             </a>

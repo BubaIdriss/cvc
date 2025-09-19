@@ -131,7 +131,7 @@
     <div class="user_post" id="post-content">
         <!-- Post owner info -->
         <div class="user_info" style="display: flex; justify-content: space-between;">
-            <a style="color: #16a085; display: flex;" href="{% url 'profile' post.user.username %}">
+            <a style="color: #16a085; display: flex;" href="{% url 'profile' post.user.id %}">
                 <!--
                 <div class="cycle_img">
                     <img src="{{ profile_images.post.user.id }}" alt="{{ post.user.username }}'s profile image">

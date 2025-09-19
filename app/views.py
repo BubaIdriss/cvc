@@ -245,19 +245,19 @@ def delete(request, post_id):
             messages.info(request, f"Unable to delete.")
 
 @login_required(login_url='login')
-def profile(request):
+def profile(request, user_id):
     # Ensure the logged-in user has a profile
     
     #from urllib.parse import quote
     #encoded_username = quote(request.user.username, safe='') 
     try:
-        profile = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=user_id)
 
     except Profile.DoesNotExist:
         return redirect('create_profile')
 
     # Fetch the profile and posts of the requested user
-    user = get_object_or_404(User, username=request.user.username)
+    user = get_object_or_404(User, id=user_id)
     user_posts = Post.objects.filter(user=user).annotate(comment_count=Count("comments")).order_by("-created_on")
     user_profile = get_object_or_404(Profile, user=user)
 
