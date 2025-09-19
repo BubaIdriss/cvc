@@ -130,10 +130,11 @@ def index(request):
         return render(request, "main/main.html", {'posts': posts})
     else:
         messages.info(request, 'Please create a profile first.')
+        return render(request, "main/main.html", {'posts': posts})
 
-        from urllib.parse import quote
-        encoded_username = quote(request.user.username, safe='')
-        return redirect('create_profile', username=encoded_username)
+        #from urllib.parse import quote
+        #encoded_username = quote(request.user.username, safe='')
+        #return redirect('create_profile', username=encoded_username)
      
 @login_required(login_url='login')
 def manage_profile(request):
@@ -244,7 +245,7 @@ def delete(request, post_id):
             messages.info(request, f"Unable to delete.")
 
 @login_required(login_url='login')
-def profile(request, username):
+def profile(request):
     # Ensure the logged-in user has a profile
     
     #from urllib.parse import quote
@@ -253,10 +254,10 @@ def profile(request, username):
         profile = Profile.objects.get(user=request.user)
 
     except Profile.DoesNotExist:
-        return redirect('create_profile', username=request.user.username)
+        return redirect('create_profile')
 
     # Fetch the profile and posts of the requested user
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=request.user.username)
     user_posts = Post.objects.filter(user=user).annotate(comment_count=Count("comments")).order_by("-created_on")
     user_profile = get_object_or_404(Profile, user=user)
 
@@ -279,16 +280,16 @@ def search(request):
 
 
 @login_required(login_url='login')
-def settings(request, username):
+def settings(request):
     return render(request, 'settings/settings.html')
 
 @login_required(login_url='login')
-def profile_settings(request, username):
+def profile_settings(request):
     profile = get_object_or_404(Profile, user=request.user)
     return render(request, 'settings/profile_settings/profile_settings.html', {'profile': profile})
 
 @login_required(login_url='login')
-def edit_account(request, username):
+def edit_account(request):
     if request.method == 'POST':
         user = request.user
         #username = request.POST.get('username', user.username)
@@ -325,7 +326,7 @@ def edit_account(request, username):
 
         user.save()
         messages.success(request, "Account updated successfully! 🎉")
-        return redirect('profile', request.user.username)
+        return redirect('profile')
 
     return render(request, 'settings/edit_account.html')
 

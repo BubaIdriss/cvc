@@ -158,7 +158,7 @@
             <div class="settings-item">
                 <h2>Profile Settings</h2>
                 <p>Update your personal details, profile picture, and bio.</p>
-                <a href="{% url 'profile_settings' request.user.username %}" class="settings-link">Go to Profile
+                <a href="{% url 'profile_settings' %}" class="settings-link">Go to Profile
                     Settings</a>
             </div>
 
@@ -166,7 +166,7 @@
             <div class="settings-item">
                 <h2>Account Settings</h2>
                 <p>Change your password, email, or manage account preferences.</p>
-                <a href="{% url 'edit_account' request.user.username %}" class="settings-link">Go to Account
+                <a href="{% url 'edit_account' %}" class="settings-link">Go to Account
                     Settings</a>
             </div>
 

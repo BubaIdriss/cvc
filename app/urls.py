@@ -12,15 +12,15 @@ urlpatterns = [
     #path("CVC/user/update/profile/", views.manage_profile, name="create_profile"),
 
     # Profile View (username may include slashes)
-    re_path(r'^CVC/(?P<username>.+)/profile/$', views.profile, name='profile'),
+    path('CVC/user/profile/$', views.profile, name='profile'),
 
     # Create Profile
-    re_path(r'^CVC/(?P<username>.+)/create/profile/$', views.manage_profile, name='create_profile'),
+    path('CVC/user/create/profile/$', views.manage_profile, name='create_profile'),
 
     # Settings
-    re_path(r'^CVC/(?P<username>.+)/profile/settings/$', views.settings, name='settings'),
-    re_path(r'^CVC/(?P<username>.+)/profile/settings/info/$', views.profile_settings, name='profile_settings'),
-    re_path(r'^CVC/(?P<username>.+)/profile/settings/info/edit/$', views.edit_account, name='edit_account'),
+    path('CVC/user/profile/settings/$', views.settings, name='settings'),
+    path('CVC/user/profile/settings/info/$', views.profile_settings, name='profile_settings'),
+    path('CVC/user/profile/settings/info/edit/$', views.edit_account, name='edit_account'),
 
     # Delete Post
     path('<str:post_id>/post/delete/', views.delete, name="delete"),
