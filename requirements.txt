@@ -4,6 +4,7 @@ charset-normalizer==3.4.1
 cloudinary==1.42.1
 config==0.5.1
 dj-database-url==3.0.1
+mysqlclient==2.2.7
 Django>=4.2,<5.0
 django-cloudinary-storage==0.3.0
 django-pwa==2.0.1
