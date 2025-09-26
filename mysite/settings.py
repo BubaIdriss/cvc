@@ -44,6 +44,10 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://cvc-0oxu6.sevalla.app",
+]
+
 
 # Application definition
 
