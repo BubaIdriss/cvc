@@ -54,6 +54,8 @@ def login(request):  # Renamed to avoid conflict with built-in login()
         username = request.POST.get('username').strip()  # Get email from the login form
         password = request.POST.get('password').strip()
 
+        username = username.upper()
+
         # Use email as the username field for authentication
         user = authenticate(username=username, password=password)  
 
@@ -62,7 +64,7 @@ def login(request):  # Renamed to avoid conflict with built-in login()
             auth_login(request, user)
             return redirect('index')  # Redirect to the homepage
         else:
-            messages.error(request, 'Invalid email or password')
+            messages.error(request, 'Invalid RegNo or password')
             return redirect('login')
     return render(request, "authenticate/login.html")
 
@@ -78,9 +80,16 @@ def signUp(request):
         password = request.POST['pssword1']
         confirm_password = request.POST['pssword2']
 
+        username = username.upper()
+
         # Check if passwords match
         if password != confirm_password:
             messages.error(request, 'Passwords do not match.')
+            return redirect('signup')
+        
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'RegNo already exists.')
             return redirect('signup')
 
         # Check if password length is at least 8 characters
@@ -326,7 +335,7 @@ def edit_account(request):
 
         user.save()
         messages.success(request, "Account updated successfully! 🎉")
-        return redirect('profile')
+        return redirect('profile', user_id=request.user.id)
 
     return render(request, 'settings/edit_account.html')
 
